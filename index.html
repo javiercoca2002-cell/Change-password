@@ -76,7 +76,7 @@
       margin-top: 10px;
       font-size: 12px;
       color: #555;
-      word-break: break-all;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -152,6 +152,8 @@
 
         if (res.ok) {
           msg.textContent = "Contraseña actualizada correctamente. Ya puedes volver a la app.";
+        } else if (res.status === 401 || res.status === 403) {
+          msg.textContent = "Este enlace ya expiró o ya fue usado. Solicita una nueva recuperación desde la app.";
         } else {
           let errorMsg = "Error desconocido.";
           try {
@@ -170,7 +172,7 @@
       }
     }
 
-    // Mostrar token en pantalla para depuración
+    // Mostrar token para depuración
     const token = getToken();
     const tokenDiv = document.getElementById("tokenDisplay");
     if (token) {
