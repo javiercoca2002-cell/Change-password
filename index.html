@@ -148,10 +148,13 @@
         } else {
           let errorMsg = "Error desconocido.";
           try {
-            const error = await res.json();
-            errorMsg = error.msg || errorMsg;
+            const text = await res.text();
+            if (text) {
+              const error = JSON.parse(text);
+              errorMsg = error.msg || errorMsg;
+            }
           } catch (e) {
-            // Si no hay cuerpo JSON, se mantiene el mensaje por defecto
+            // No hacer nada, mantener mensaje por defecto
           }
           msg.textContent = "Error al actualizar: " + errorMsg;
         }
