@@ -99,8 +99,22 @@
       input.type = input.type === "password" ? "text" : "password";
     }
 
+    function getToken() {
+      // Buscar en query string (?access_token=...)
+      const searchParams = new URLSearchParams(window.location.search);
+      let token = searchParams.get("access_token");
+
+      // Si no está, buscar en fragmento (#access_token=...)
+      if (!token && window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        token = hashParams.get("access_token");
+      }
+
+      return token;
+    }
+
     async function changePassword() {
-      const token = new URLSearchParams(window.location.search).get("access_token");
+      const token = getToken();
       const pass1 = document.getElementById("pass1").value;
       const pass2 = document.getElementById("pass2").value;
       const msg = document.getElementById("message");
