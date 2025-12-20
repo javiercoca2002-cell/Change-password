@@ -72,6 +72,12 @@
       font-size: 14px;
       color: #333;
     }
+    .token {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #555;
+      word-break: break-all;
+    }
   </style>
 </head>
 <body>
@@ -91,6 +97,7 @@
 
     <button onclick="changePassword()">Cambiar contraseña</button>
     <div id="message" class="msg"></div>
+    <div id="tokenDisplay" class="token"></div>
   </div>
 
   <script>
@@ -154,13 +161,22 @@
               errorMsg = error.msg || errorMsg;
             }
           } catch (e) {
-            // No hacer nada, mantener mensaje por defecto
+            // mantener mensaje por defecto
           }
           msg.textContent = "Error al actualizar: " + errorMsg;
         }
       } catch (err) {
         msg.textContent = "Error de conexión: " + err;
       }
+    }
+
+    // Mostrar token en pantalla para depuración
+    const token = getToken();
+    const tokenDiv = document.getElementById("tokenDisplay");
+    if (token) {
+      tokenDiv.textContent = "Token recibido: " + token;
+    } else {
+      tokenDiv.textContent = "No se recibió ningún token en la URL.";
     }
   </script>
 </body>
