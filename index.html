@@ -100,11 +100,9 @@
     }
 
     function getToken() {
-      // Buscar en query string (?access_token=...)
       const searchParams = new URLSearchParams(window.location.search);
       let token = searchParams.get("access_token");
 
-      // Si no está, buscar en fragmento (#access_token=...)
       if (!token && window.location.hash) {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         token = hashParams.get("access_token");
@@ -148,8 +146,14 @@
         if (res.ok) {
           msg.textContent = "Contraseña actualizada correctamente. Ya puedes volver a la app.";
         } else {
-          const error = await res.json();
-          msg.textContent = "Error al actualizar: " + (error.msg || "Error desconocido.");
+          let errorMsg = "Error desconocido.";
+          try {
+            const error = await res.json();
+            errorMsg = error.msg || errorMsg;
+          } catch (e) {
+            // Si no hay cuerpo JSON, se mantiene el mensaje por defecto
+          }
+          msg.textContent = "Error al actualizar: " + errorMsg;
         }
       } catch (err) {
         msg.textContent = "Error de conexión: " + err;
