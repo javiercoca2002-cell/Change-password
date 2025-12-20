@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MiRutaSS | Cambio de contraseña</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #5A2A82;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #5A2A82;
+      user-select: none;
+    }
+    button {
+      background-color: #5A2A82;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #4a2370;
+    }
+    .msg {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>MiRutaSS</h1>
+    <p>Este es el sitio oficial para cambiar tu contraseña. Ingresa una nueva clave segura.</p>
+
+    <div class="input-group">
+      <input type="password" id="pass1" placeholder="Nueva contraseña">
+      <span class="toggle" onclick="toggleVisibility('pass1')">👁️</span>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="pass2" placeholder="Confirmar contraseña">
+      <span class="toggle" onclick="toggleVisibility('pass2')">👁️</span>
+    </div>
+
+    <button onclick="changePassword()">Cambiar contraseña</button>
+    <div id="message" class="msg"></div>
+  </div>
+
+  <script>
+    function toggleVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    async function changePassword() {
+      const token = new URLSearchParams(window.location.search).get("access_token");
+      const pass1 = document.getElementById("pass1").value;
+      const pass2 = document.getElementById("pass2").value;
+      const msg = document.getElementById("message");
+
+      if (!token) {
+        msg.textContent = "No se encontró el token de acceso. Verifica el enlace.";
+        return;
+      }
+
+      if (pass1.length < 6 || pass2.length < 6) {
+        msg.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        return;
+      }
+
+      if (pass1 !== pass2) {
+        msg.textContent = "Las contraseñas no coinciden.";
+        return;
+      }
+
+      try {
+        const res = await fetch("https://dxbivfspnrhhewllirjh.supabase.co/auth/v1/user", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token,
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Yml2ZnNwbnJoaGV3bGxpcmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NzUyMjksImV4cCI6MjA3MjQ1MTIyOX0.y2WHxKwoIZ07WMcBYY110XIa5LBqCJh1YSAwuinGwGc"
+          },
+          body: JSON.stringify({ password: pass1 })
+        });
+
+        if (res.ok) {
+          msg.textContent = "Contraseña actualizada correctamente. Ya puedes volver a la app.";
+        } else {
+          const error = await res.json();
+          msg.textContent = "Error al actualizar: " + (error.msg || "Error desconocido.");
+        }
+      } catch (err) {
+        msg.textContent = "Error de conexión: " + err;
+      }
+    }
+  </script>
+</body>
+</html>
