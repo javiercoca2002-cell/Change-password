@@ -138,7 +138,8 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
+            "Authorization": "Bearer " + token,
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4Yml2ZnNwbnJoaGV3bGxpcmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NzUyMjksImV4cCI6MjA3MjQ1MTIyOX0.y2WHxKwoIZ07WMcBYY110XIa5LBqCJh1YSAwuinGwGc"
           },
           body: JSON.stringify({ password: pass1 })
         });
