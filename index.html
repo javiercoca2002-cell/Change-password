@@ -135,7 +135,7 @@
 
       try {
         const res = await fetch("https://dxbivfspnrhhewllirjh.supabase.co/auth/v1/user", {
-          method: "PATCH",
+          method: "PUT", // 🔥 cambio de PATCH a PUT
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token,
