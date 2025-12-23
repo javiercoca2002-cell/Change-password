@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f9f9;
+      background-color: #F3F0F9;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,19 +16,20 @@
     .container {
       background: #fff;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(103, 100, 253, 0.15);
       width: 100%;
       max-width: 400px;
       text-align: center;
     }
     h1 {
-      color: #5A2A82;
+      color: #6764FD;
       margin-bottom: 10px;
+      font-size: 24px;
     }
     p {
-      color: #666;
-      font-size: 14px;
+      color: #555;
+      font-size: 15px;
       margin-bottom: 20px;
     }
     .input-group {
@@ -40,9 +41,10 @@
       width: 100%;
       padding: 12px 40px 12px 12px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 14px;
       box-sizing: border-box;
+      background-color: #FAF8FC;
     }
     .toggle {
       position: absolute;
@@ -51,21 +53,22 @@
       transform: translateY(-50%);
       cursor: pointer;
       font-size: 18px;
-      color: #5A2A82;
+      color: #6764FD;
       user-select: none;
     }
     button {
-      background-color: #5A2A82;
+      background-color: #6764FD;
       color: #fff;
       border: none;
       padding: 12px 20px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 15px;
       cursor: pointer;
       width: 100%;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #4a2370;
+      background-color: #4E4BC0;
     }
     .msg {
       margin-top: 20px;
@@ -100,7 +103,6 @@
     }
 
     function getToken() {
-      // Captura primero ?access_token=..., luego #access_token=...
       const searchParams = new URLSearchParams(window.location.search);
       let token = searchParams.get("access_token");
 
@@ -135,7 +137,7 @@
 
       try {
         const res = await fetch("https://dxbivfspnrhhewllirjh.supabase.co/auth/v1/user", {
-          method: "PUT", // 🔥 cambio de PATCH a PUT
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token,
@@ -156,9 +158,7 @@
               const error = JSON.parse(text);
               errorMsg = error.msg || errorMsg;
             }
-          } catch (e) {
-            // mantener mensaje por defecto
-          }
+          } catch (e) {}
           msg.textContent = "Error al actualizar: " + errorMsg;
         }
       } catch (err) {
